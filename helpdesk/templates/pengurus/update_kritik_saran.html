@@ -1,0 +1,136 @@
+{% extends 'base_main.html' %}{% load static %} {% block content %}
+<style>
+  form .btn-submit {
+    display: flex;
+    background: black;
+    color: white;
+    padding: 0.5em;
+    border-radius: 5px;
+    width: 150px;
+    cursor: pointer;
+  }
+  form .btn-submit:focus {
+    color: black;
+    background: white;
+    border: 1px solid black;
+  }
+  form .btn-submit .link-submit {
+    font-size: 14px;
+    text-align: center;
+    color: white;
+    width: 150px;
+  }
+  form .btn-submit .link-submit:focus {
+    font-size: 14px;
+    text-align: center;
+    color: black;
+  }
+  .logout:hover {
+    color: red;
+  }
+</style>
+<body>
+  <header class="hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-6 col-xs-12">
+          <nav>
+            <div id="menu-toggle">
+              <div class="hamburger">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+              </div>
+              <div class="cross">
+                <span class="line"></span>
+                <span class="line"></span>
+              </div>
+            </div>
+            <ul class="main-nav">
+              <li><a href="{% url 'index_helpdesk' %}">Home</a></li>
+
+              <li class="logout"><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </nav>
+          <div class="hero-text">
+            <h1><span>Hawariyyun</span></h1>
+            <h3>Finding the best version of you</h3>
+            {% if request.user.is_authenticated %}
+            <h3>Selamat datang {{user}} !</h3>
+            {% else %}
+            <a href="{% url 'register' %}" class="btn btn-lg btn-primary">Daftar/Masuk</a>
+            {% endif %}
+            <ul class="social-links" style="margin-top: 2em">
+              <li class="label">Follow me</li>
+              <li>
+                <a href="#"><img src="{% static 'maria/assets/twitter.png' %}" /></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="case-study">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h4 class="sub-heading">event</h4>
+          <h1 class="heading purple">
+            <span class="blue">Service</span><br />
+            Kritik dan Saran kalian tentang kami
+          </h1>
+          <!-- Swiper -->
+          <div class="swiper-container client-swiper" style="height: 750px">
+            <a href="{% url 'list_kritik_saran' %}" class="btn btn-primary" style="margin-bottom: 2em">Kembali</a>
+            {% if request.user.is_authenticated %}
+
+            <form action="#" method="POST">
+              <b>Jenis: </b><br />
+              <p>{{pi.get_jenis_display}}</p>
+              <br />
+              <b>Penjelasan:</b><br />
+              <textarea class="form-control" style="height: 300px" disabled>{{pi.pembahasan}}</textarea>
+              <br />
+              {{form.as_p}} {% csrf_token %}
+              <br />
+              <button class="btn-submit">Submit</button>
+            </form>
+
+            {% else %}
+            <h2 class="alert text-center">Login terlebih dahulu untuk bisa memberikan kritik dan saran</h2>
+            <!-- Add Arrows -->
+
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container-fluid">
+      <div class="row footer">
+        <div class="col-md-12 text-center">
+          <h1>
+            <span><img src="{% static 'logo-biru.png' %}" style="height: 200px; margin-top: -1em" /></span>
+          </h1>
+          <ul class="social-links">
+            <li>
+              <a href="#"><img src="{% static 'maria/assets/twitter.png' %}" /></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row sub-footer">
+        <div class="col-md-12 text-center">
+          <p>Developed by <a href="https://instagram.com/medkomlc_11">Media Komunikasi</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+{% endblock content %}

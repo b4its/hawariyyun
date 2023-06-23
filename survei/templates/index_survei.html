@@ -1,0 +1,318 @@
+{% extends 'base_main.html' %}{% load static %} {% block content %}
+<style>
+  form .btn-submit,.submit {
+    display: flex;
+    background: black;
+    color: white;
+    padding: 0.5em;
+    border-radius: 5px;
+    width: 150px;
+    cursor: pointer;
+  }
+  
+  form .btn-submit:focus {
+    color: black;
+    background: white;
+    border: 1px solid black;
+  }
+  form .btn-submit .link-submit {
+    font-size: 14px;
+    text-align: center;
+    color: white;
+    width: 150px;
+  }
+  form .btn-submit .link-submit:focus {
+    font-size: 14px;
+    text-align: center;
+    color: black;
+  }
+  .logout:hover {
+    color: red;
+  }
+
+  .quiz-slider {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .slide {
+    width: 100%;
+    height: 600px;
+    display: none;
+  }
+</style>
+<body>
+  <header class="hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-6 col-xs-12">
+          <nav>
+            <div id="menu-toggle">
+              <div class="hamburger">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+              </div>
+              <div class="cross">
+                <span class="line"></span>
+                <span class="line"></span>
+              </div>
+            </div>
+            <ul class="main-nav">
+              <li><a href="{% url 'index' %}">Home</a></li>
+              {% if cek %} {% else %}
+              <li><a href="{% url 'list_kritik_saran' %}">Pengurus LC</a></li>
+              {% endif %}
+              <li class="logout"><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </nav>
+          <div class="hero-text">
+            <h1><span>Hawariyyun</span></h1>
+            <h3>Finding the best version of you</h3>
+            {% if request.user.is_authenticated %}
+            <h3>Selamat datang {{user.first_name}} {{user.last_name}} !</h3>
+            {% else %}
+            <a href="{% url 'register' %}" class="btn btn-lg btn-primary">Daftar/Masuk</a>
+            {% endif %}
+            <ul class="social-links" style="margin-top: 2em">
+              <li class="label">Follow me</li>
+              <li>
+                <a href="https://www.instagram.com/official_hawariyyun" style="color: white">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                    <path
+                      d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"
+                    />
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href="#" style="color: white">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+                    <path
+                      d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+                    />
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="case-study">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h4 class="sub-heading">event</h4>
+          <h1 class="heading purple">
+            <span class="blue">Service</span><br />
+            Survei Minat dan Bakat
+          </h1>
+          <!-- Swiper -->
+          <div class="swiper-container client-swiper" style="max-height: 600px; overflow: auto">
+            {% if request.user.is_authenticated %}
+
+            <div class="quiz-slider" style="max-height:900px; overflow:auto">
+              <form action="{% url 'index_survei' %}" method="POST">
+              
+                <div class="slide" style="min-height:900px" >
+                  <b>Deskripsi:</b>
+                  <p>Terima kasih telah mengambil waktu Anda untuk mengisi formulir survei minat bakat ini. Tujuan dari survei ini adalah untuk mengumpulkan informasi tentang minat dan bakat individu yang berpartisipasi, sehingga dapat memberikan wawasan dan bantuan dalam mengembangkan potensi diri.
+                  </p>
+                  <b>Instruksi:</b>
+                  <p>Isilah formulir ini dengan jujur dan berdasarkan minat dan bakat Anda sendiri.
+                    Pastikan untuk mengisi semua pertanyaan yang diwajibkan, kecuali jika ditandai sebagai opsional.
+                    Anda dapat memberikan jawaban singkat atau menjelaskan secara rinci sesuai kebutuhan.</p>
+
+                  <b>Bagian 1 : Minat dan Bakat </b>
+                  <p>Minat</p>
+                <h3 >Minat apa yang paling menonjol dalam diri anda
+                </h3>
+                <textarea  class="form-control" required style="height:150px;"name="nomor1"></textarea>
+              </div>
+                <div class="slide">
+                  <b>Bagian 1 : Minat dan Bakat </b>
+                  <p>Minat</p>
+                <h3 > Apakah Anda telah menerima penghargaan atau prestasi dalam bidang minat tersebut? Jika ya, tolong berikan beberapa contoh.
+                   </h3>
+                <textarea  class="form-control" required style="height:150px;"name="nomor2"></textarea>
+              </div>
+                <div class="slide">
+                  <b>Bagian 1 : Minat dan Bakat </b>
+                  <p>Bakat</p>
+                <h3 >Bakat atau keahlian apa yang paling menonjol dalam diri Anda? Jelaskan pengalaman terkait bakat tersebut dengan singkat.
+                          </h3>
+                <textarea  class="form-control" required style="height:150px;"name="nomor3"></textarea>
+              </div>
+                {% comment %} <div class="slide">
+                  <b>Bagian 1 : Minat dan Bakat </b>
+                  <p>Bakat</p>
+                <h3 > Jelaskan pengalaman terkait bakat tersebut dengan singkat  </h3>
+                <textarea  class="form-control" required style="height:150px;"name="nomor4"></textarea>
+              </div> {% endcomment %}
+                {% comment %} <div class="slide">
+                  <b>Bagian 1 : Minat dan Bakat </b>
+                  <p>Tujuan dan Harapan:</p>
+                <h3 > Apa yang Anda harapkan dari survei ini?  </h3>
+                <textarea  class="form-control" required style="height:150px;"name="nomor5"></textarea>
+              </div> {% endcomment %}
+                {% comment %} <div class="slide">
+                  <b>Bagian 1 : Minat dan Bakat </b>
+                  <p>Tujuan dan Harapan:</p>
+                <h3 >Jelaskan tujuan jangka pendek dan jangka panjang Anda terkait minat dan bakat yang Anda miliki. </h3>
+                <textarea  class="form-control" required style="height:150px;"name="nomor6"></textarea>
+              </div> {% endcomment %}
+                <div class="slide" >
+                  <b>Bagian 1 : Minat dan Bakat </b>
+                  <p>Ketersediaan Waktu:</p>
+                <h3 >Berapa banyak waktu yang dapat Anda alokasikan untuk mengembangkan minat dan bakat anda</h3>
+                {{form.as_p}}
+              </div>
+              <div class="slide">
+                <b>Bagian 2 : Tujuan dan Harapan </b>
+ 
+              <h3 > 
+                Apakah Anda memiliki tujuan atau impian yang ingin dicapai melalui minat dan bakat Anda? Jika ya, tolong jelaskan.</h3>
+              <textarea  class="form-control" required style="height:150px;"name="nomor5"></textarea>
+            </div>
+              <div class="slide">
+                <b>Bagian 2 : Tujuan dan Harapan </b>
+ 
+              <h3 >Apa yang Anda harapkan dari pengembangan minat dan bakat Anda di masa depan? </h3>
+              <textarea  class="form-control" required style="height:150px;"name="nomor6"></textarea>
+            </div>
+              <div class="slide">
+                <b>Bagian 2 : Tujuan dan Harapan </b>
+ 
+              <h3 > Apakah Anda memiliki rencana untuk terus mengembangkan minat dan bakat Anda? Jika ya, bagaimana Anda berencana melakukannya?</h3>
+              <textarea  class="form-control" required style="height:150px;"name="nomor7"></textarea>
+            </div>
+
+              <div class="slide">
+                <b>Bagian 3 : Informasi Tambahan </b>
+ 
+              <h3 >Apa yang Anda harapkan dari partisipasi dalam survei ini? </h3>
+              <textarea  class="form-control" required style="height:150px;"name="nomor8"></textarea>
+            </div>
+              <div class="slide">
+                <b>Bagian 3 : Informasi Tambahan </b>
+ 
+              <h3 > Apakah ada kendala atau batasan tertentu terkait minat dan bakat anda?</h3>
+              <textarea  class="form-control" required style="height:150px;"name="nomor9"></textarea>
+            </div>
+              <div class="slide">
+                <b>Bagian 3 : Informasi Tambahan </b>
+ 
+              <h3>Apakah Anda tertarik untuk berpartisipasi dalam kegiatan atau program yang berkaitan dengan minat dan bakat Anda? Jika ya, jelaskan lebih lanjut. </h3>
+              <textarea  class="form-control" required style="height:150px;"name="nomor10"></textarea>
+            </div>
+              
+              <div class="navigation" style="display: flex; flex-direction: row; justify-content: space-between">
+                <b class="prev" style="cursor:pointer">Sebelumnya</b>
+                <b class="next" style="cursor:pointer">Selanjutnya</b>
+                {% csrf_token %}
+                <button class="submit">Submit</button>
+              </div>
+            </div>
+          </form>
+            {% else %}
+            <h2 class="alert text-center">Login terlebih dahulu untuk bisa memberikan kritik dan saran</h2>
+            <!-- Add Arrows -->
+
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container-fluid">
+      <div class="row footer">
+        <div class="col-md-12 text-center">
+          <h1>
+            <span><img src="{% static 'logo-biru.png' %}" style="height: 200px; margin-top: -1em" /></span>
+          </h1>
+          <ul class="social-links">
+            <li>
+              <a href="https://www.instagram.com/medkom_hawariyyun" style="color: white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                  <path
+                    d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"
+                  />
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a href="#" style="color: white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
+                  <path
+                    d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+                  />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row sub-footer">
+        <div class="col-md-12 text-center">
+          <p>Developed by <a href="https://instagram.com/medkom_hawariyyun">Media Komunikasi</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const slides = document.querySelectorAll(".slide");
+      let currentSlide = 0;
+
+      function showSlide(n) {
+        slides[currentSlide].style.display = "none";
+        slides[n].style.display = "block";
+        currentSlide = n;
+
+        // Memeriksa apakah slide saat ini adalah slide terakhir
+        if (currentSlide === slides.length - 1) {
+          document.querySelector(".submit").style.display = "block"; // Tampilkan tombol submit
+          document.querySelector(".next").style.display = "none"; // Sembunyikan tombol selanjutnya
+        } else {
+          document.querySelector(".submit").style.display = "none"; // Sembunyikan tombol submit
+          document.querySelector(".next").style.display = "block"; // Tampilkan tombol selanjutnya
+        }
+      }
+
+      function prevSlide() {
+        if (currentSlide === 0) {
+          showSlide(slides.length - 1);
+        } else {
+          showSlide(currentSlide - 1);
+        }
+      }
+
+      function nextSlide() {
+        if (currentSlide === slides.length - 1) {
+          showSlide(0);
+        } else {
+          showSlide(currentSlide + 1);
+        }
+      }
+
+      function submitQuiz() {
+        // Logika yang dijalankan saat tombol submit diklik
+        // Anda dapat menambahkan kode untuk memeriksa jawaban dan menampilkan hasil di sini
+      }
+
+      document.querySelector(".prev").addEventListener("click", prevSlide);
+      document.querySelector(".next").addEventListener("click", nextSlide);
+      document.querySelector(".submit").addEventListener("click", submitQuiz);
+
+      showSlide(0);
+    });
+  </script>
+</body>
+
+{% endblock content %}

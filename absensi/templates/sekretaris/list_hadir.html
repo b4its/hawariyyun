@@ -1,0 +1,153 @@
+{% extends 'base_main.html' %}{% load static %} {% block content %}
+<style>
+  form .btn-submit {
+    display: flex;
+    background: black;
+    color: white;
+    padding: 0.5em;
+    border-radius: 5px;
+    width: 150px;
+    cursor: pointer;
+  }
+  form .btn-submit:focus {
+    color: black;
+    background: white;
+    border: 1px solid black;
+  }
+  form .btn-submit .link-submit {
+    font-size: 14px;
+    text-align: center;
+    color: white;
+    width: 150px;
+  }
+  form .btn-submit .link-submit:focus {
+    font-size: 14px;
+    text-align: center;
+    color: black;
+  }
+</style>
+<body>
+  <header class="hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-6 col-xs-12">
+          <nav>
+            <div id="menu-toggle">
+              <div class="hamburger">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+              </div>
+              <div class="cross">
+                <span class="line"></span>
+                <span class="line"></span>
+              </div>
+            </div>
+            <ul class="main-nav">
+              <li><a href="{% url 'index' %}">Home</a></li>
+            </ul>
+          </nav>
+          <div class="hero-text">
+            <h1>{{pengurus.get_role_display}}<span></span></h1>
+            <h3></h3>
+            {% if request.user.is_authenticated %}
+            <h3>Selamat datang {{pengurus.user}} !</h3>
+            {% else %}
+            <a href="{% url 'register' %}" class="btn btn-lg btn-primary">Daftar/Masuk</a>
+            {% endif %}
+            <ul class="social-links" style="margin-top: 2em">
+              <li class="label">Follow me</li>
+              <li>
+                <a href="#"><img src="{% static 'maria/assets/twitter.png' %}" /></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="case-study">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h4 class="sub-heading">event</h4>
+          <h1 class="heading purple">
+            <span class="blue">Service</span><br />
+            Absensi Kehadiran Hawariyyun
+          </h1>
+          <!-- Swiper -->
+          <div class="swiper-container client-swiper" style="max-height: 400px; overflow: auto">
+            <div class="filter" style="margin-bottom: 2em" style="display: flex">
+              <a href="{% url 'list_kehadiran' %}" class="btn btn-primary" style="margin-bottom: 2em">Kembali </a>
+              <a href="{% url 'list_hadir' %}" class="btn btn-success" style="margin-bottom: 2em">Hadir </a>
+              <a href="{% url 'list_izin' %}" class="btn btn-warning" style="margin-bottom: 2em">Izin </a>
+              <a href="{% url 'list_thadir' %}" class="btn btn-danger" style="margin-bottom: 2em">Tidak Hadir </a>
+              <form class="form-inline my-2 my-lg-0" style="display: flex; flex-direction: row" method="POST" action="{% url 'list_nama' %}">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2 col-sm-2" type="search" placeholder="cari nama depan.." aria-label="Search" name="pencarian" />
+                <button class="btn btn-primary" type="submit">Cari</button>
+              </form>
+            </div>
+            {% if request.user.is_authenticated %}
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Nama</th>
+                  <th scope="col">Kegiatan</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in hadir %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td>{{i.user.first_name}} {{i.user.last_name}}</td>
+                  <td>{{i.kegiatan}}</td>
+                  <td>{{i.get_status_display}}</td>
+                  <td>
+                    <a href="{% url 'show_kehadiran' i.id %}" class="btn btn-warning">Show</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <h2 class="alert text-center">Login terlebih dahulu untuk bisa memberikan kritik dan saran</h2>
+          </div>
+          <!-- Add Arrows -->
+
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container-fluid">
+      <div class="row footer">
+        <div class="col-md-12 text-center">
+          <h1>
+            <span><img src="{% static 'logo-biru.png' %}" style="height: 200px; margin-top: -1em" /></span>
+          </h1>
+          <ul class="social-links">
+            <li>
+              <a href="#"><img src="{% static 'maria/assets/twitter.png' %}" /></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row sub-footer">
+        <div class="col-md-12 text-center">
+          <p>Developed by <a href="https://instagram.com/medkomlc_11">Media Komunikasi</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+{% endblock content %}
