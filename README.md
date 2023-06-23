@@ -1,7 +1,7 @@
 # Feature
 
 - Authenticate
-- helpdesk
+- Helpdesk
 - CRUD
 - Search field
 - Quiz
